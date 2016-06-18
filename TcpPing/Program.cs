@@ -93,9 +93,9 @@ namespace TcpPing
                     stopWatch.Stop();
                     socket.Close();
 
-                    var delay = stopWatch.Elapsed.TotalMilliseconds;
+                    var delay = stopWatch.Elapsed;
 
-                    yield return delay < TimeOutLimit.TotalMilliseconds ? (double?) delay : null;
+                    yield return delay < TimeOutLimit ? (double?) delay.TotalMilliseconds : null;
 
                     Thread.Sleep(Interval);
                 }
