@@ -37,23 +37,21 @@ namespace TcpPing
 
             var endPoint = new IPEndPoint(ip, port);
 
-            Console.WriteLine(
-                $"Pinging {hostname}:{port} [{ip}:{port}]:");
+            Console.WriteLine($"Pinging {hostname}:{port} [{ip}:{port}]:");
 
+            TcpPing(endPoint, WarmUpLimit);
             var pingResults = new List<double?>();
-
-            WarmUp(endPoint);
-            foreach (var delay in TcpPing(endPoint))
+            for (var i = 0; i < 4; i++)
             {
+                var delay = TcpPing(endPoint, TimeOutLimit);
                 pingResults.Add(delay);
-                Console.WriteLine(
-                    delay.HasValue
-                        ? $"time = {delay.Value:0.00} ms"
-                        : "Request timed out");
+                Console.WriteLine(delay.HasValue
+                                      ? $"time = {delay.Value:0.00} ms"
+                                      : "Request timed out");
+                Thread.Sleep(RetryInterval);
             }
 
-            Console.WriteLine(
-                $"--- {ip}:{port} ping statistics ---");
+            Console.WriteLine($"--- {ip}:{port} ping statistics ---");
 
             var validDelays = pingResults
                 .Where(t => t.HasValue)
@@ -73,40 +71,10 @@ namespace TcpPing
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        private static IEnumerable<double?> TcpPing(IPEndPoint endPoint)
+        private static double? TcpPing(IPEndPoint endPoint, TimeSpan timeOutLimit)
         {
-            for (var i = 0; i < 4; i++)
-            {
-                using (var socket =
-                        new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
-                        {
-                            Blocking = true
-                        }
-                )
-                {
-                    var stopWatch = new Stopwatch();
-
-                    stopWatch.Start();
-                    // ReSharper disable once AccessToDisposedClosure
-                    var taskConnect = Task.Run(() => socket.Connect(endPoint));
-                    var taskCountDown = Task.Run(() => Thread.Sleep(TimeOutLimit));
-                    Task.WaitAny(taskConnect, taskCountDown);
-                    stopWatch.Stop();
-                    socket.Close();
-
-                    var delay = stopWatch.Elapsed;
-
-                    yield return delay < TimeOutLimit ? (double?) delay.TotalMilliseconds : null;
-
-                    Thread.Sleep(Interval);
-                }
-            }
-        }
-
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private static void WarmUp(IPEndPoint endPoint)
-        {
-            using (var socket =
+            using (
+                var socket =
                     new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                     {
                         Blocking = true
@@ -118,10 +86,14 @@ namespace TcpPing
                 stopWatch.Start();
                 // ReSharper disable once AccessToDisposedClosure
                 var taskConnect = Task.Run(() => socket.Connect(endPoint));
-                var taskCountDown = Task.Run(() => Thread.Sleep(WarmUpLimit));
+                var taskCountDown = Task.Run(() => Thread.Sleep(timeOutLimit));
                 Task.WaitAny(taskConnect, taskCountDown);
                 stopWatch.Stop();
                 socket.Close();
+
+                var delay = stopWatch.Elapsed;
+
+                return delay < timeOutLimit ? (double?) delay.TotalMilliseconds : null;
             }
         }
 
@@ -156,7 +128,7 @@ namespace TcpPing
 
         private static TimeSpan TimeOutLimit => TimeSpan.FromSeconds(2);
 
-        private static TimeSpan Interval => TimeSpan.FromSeconds(1);
+        private static TimeSpan RetryInterval => TimeSpan.FromSeconds(1);
 
         private static TimeSpan WarmUpLimit => TimeSpan.FromSeconds(0.1);
     }
