@@ -15,7 +15,7 @@ namespace TcpPing
         {
             try
             {
-                Driver(args);
+                Drive(args);
             }
             catch (Exception ex)
             {
@@ -23,7 +23,7 @@ namespace TcpPing
             }
         }
 
-        private static void Driver(IReadOnlyList<string> args)
+        private static void Drive(IReadOnlyList<string> args)
         {
             if (args[0].Split(':').Length != 2)
             {
