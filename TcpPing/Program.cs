@@ -42,6 +42,7 @@ namespace TcpPing
 
             var pingResults = new List<double?>();
 
+            WarmUp(endPoint);
             foreach (var delay in TcpPing(endPoint))
             {
                 pingResults.Add(delay);
@@ -74,7 +75,6 @@ namespace TcpPing
         // ReSharper disable once SuggestBaseTypeForParameter
         private static IEnumerable<double?> TcpPing(IPEndPoint endPoint)
         {
-            WarmUp(endPoint);
             for (var i = 0; i < 4; i++)
             {
                 using (var socket =
