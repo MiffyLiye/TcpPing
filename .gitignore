@@ -188,6 +188,9 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
+# Xamarin Studio
+*.userprefs
+
 # JetBrains Rider
 .idea/
 *.sln.iml

@@ -148,7 +148,7 @@ namespace TcpPing
                 var port = ushort.Parse(portString);
                 return port;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new ArgumentException($"Invalid port number {portString}.");
             }
