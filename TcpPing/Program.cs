@@ -74,6 +74,7 @@ namespace TcpPing
         // ReSharper disable once SuggestBaseTypeForParameter
         private static IEnumerable<double?> TcpPing(IPEndPoint endPoint)
         {
+            WarmUp(endPoint);
             for (var i = 0; i < 4; i++)
             {
                 using (var socket =
@@ -99,6 +100,28 @@ namespace TcpPing
 
                     Thread.Sleep(Interval);
                 }
+            }
+        }
+
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private static void WarmUp(IPEndPoint endPoint)
+        {
+            using (var socket =
+                    new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                    {
+                        Blocking = true
+                    }
+            )
+            {
+                var stopWatch = new Stopwatch();
+
+                stopWatch.Start();
+                // ReSharper disable once AccessToDisposedClosure
+                var taskConnect = Task.Run(() => socket.Connect(endPoint));
+                var taskCountDown = Task.Run(() => Thread.Sleep(WarmUpLimit));
+                Task.WaitAny(taskConnect, taskCountDown);
+                stopWatch.Stop();
+                socket.Close();
             }
         }
 
@@ -134,5 +157,7 @@ namespace TcpPing
         private static TimeSpan TimeOutLimit => TimeSpan.FromSeconds(2);
 
         private static TimeSpan Interval => TimeSpan.FromSeconds(1);
+
+        private static TimeSpan WarmUpLimit => TimeSpan.FromSeconds(0.1);
     }
 }
