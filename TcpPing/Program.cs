@@ -58,7 +58,7 @@ namespace TcpPing
             var sentCount = pingResults.Count;
             var receivedCount = pingResults.Count(t => t.HasValue);
             var lossCount = sentCount - receivedCount;
-            var lossRate = lossCount / sentCount;
+            var lossRate = (double) lossCount / sentCount;
             Console.Write($"Sent = {sentCount}, ");
             Console.Write($"Received = {receivedCount}, ");
             Console.Write($"Loss = {lossCount} ");
