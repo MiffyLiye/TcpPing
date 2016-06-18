@@ -52,13 +52,13 @@ namespace TcpPing
                         : "Request timed out");
             }
 
+            Console.WriteLine(
+                $"--- {ip}:{port} ping statistics ---");
+
             var validDelays = pingResults
                 .Where(t => t.HasValue)
                 .Select(t => t.Value)
                 .ToList();
-            Console.WriteLine(
-                $"--- {ip}:{port} ping statistics ---");
-
             if (validDelays.Any())
                 Console.WriteLine(
                     $"round-trip min/avg/max = {validDelays.Min():0.00}/{validDelays.Max():0.00}/{validDelays.Average():0.00} ms");
