@@ -21,6 +21,8 @@ namespace TcpPingTest.TcpPingDriverTests
         private static TextWriterSpy fakeOutputWriter;
         private static TcpPingDriver tcpPingDriver;
 
+        private static string NewLine => Environment.NewLine;
+
         public Establish given_tcp_ping_driver_with_dns = () =>
         {
             fakeDns = new Mock<IDns>();
@@ -43,7 +45,7 @@ namespace TcpPingTest.TcpPingDriverTests
             };
 
             public It should_show_four_ping_time =
-            () => output.Split('\n')
+            () => output.Split(new[] {NewLine}, StringSplitOptions.None)
                 .Count(line => new Regex(@"time = .* ms").Match(line).Success)
                 .ShouldEqual(4);
 
@@ -74,12 +76,12 @@ namespace TcpPingTest.TcpPingDriverTests
             };
 
             public It should_show_three_ping_time =
-            () => output.Split('\n')
+            () => output.Split(new[] {NewLine}, StringSplitOptions.None)
                 .Count(line => new Regex(@"time = .* ms").Match(line).Success)
                 .ShouldEqual(3);
 
             public It should_show_one_request_timed_out =
-            () => output.Split('\n')
+            () => output.Split(new[] {NewLine}, StringSplitOptions.None)
                 .Count(line => new Regex(@"Request timed out").Match(line).Success)
                 .ShouldEqual(1);
 
@@ -117,12 +119,12 @@ namespace TcpPingTest.TcpPingDriverTests
             };
 
             public It should_show_zero_ping_time =
-            () => output.Split('\n')
+            () => output.Split(new[] {NewLine}, StringSplitOptions.None)
                 .Count(line => new Regex(@"time = .* ms").Match(line).Success)
                 .ShouldEqual(0);
 
             public It should_show_four_request_timed_out =
-            () => output.Split('\n')
+            () => output.Split(new[] {NewLine}, StringSplitOptions.None)
                 .Count(line => new Regex(@"Request timed out").Match(line).Success)
                 .ShouldEqual(4);
 
@@ -130,7 +132,7 @@ namespace TcpPingTest.TcpPingDriverTests
             () => output.ShouldContain(@"Sent = 4, Received = 0, Loss = 4 (100% loss)");
 
             public It should_not_show_time_statistics =
-            () => output.Split('\n')
+            () => output.Split(new[] {NewLine}, StringSplitOptions.None)
                 .Count(line => new Regex(@"Minimum = .* ms, Maximum = .* ms, Average = .* ms").Match(line).Success)
                 .ShouldEqual(0);
 
