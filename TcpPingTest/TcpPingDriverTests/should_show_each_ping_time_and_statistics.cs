@@ -24,8 +24,6 @@ namespace TcpPingTest.TcpPingDriverTests
         public Establish given_tcp_ping_driver_with_dns = () =>
         {
             fakeDns = new Mock<IDns>();
-            fakeDns.Setup(d => d.GetHostAddresses("example.com")).Returns(new[] {IPAddress.Parse("1.1.1.1")});
-            fakeDns.Setup(d => d.GetHostAddresses("localhost")).Returns(new[] {IPAddress.Parse("127.0.0.1")});
             fakeSocketService = new FakeSocketService();
             fakeOutputWriter = new TextWriterSpy();
             tcpPingDriver = new TcpPingDriver(
@@ -39,7 +37,7 @@ namespace TcpPingTest.TcpPingDriverTests
 
         public class when_all_pings_received
         {
-            public Because given_hostname_and_port = () =>
+            public Because ping_remote = () =>
             {
                 tcpPingDriver.Drive(new[] {"1.1.1.1:80"});
                 output = fakeOutputWriter.Output;
@@ -67,9 +65,10 @@ namespace TcpPingTest.TcpPingDriverTests
                 var delay = TimeSpan.FromSeconds(0.2);
                 var slowSocket = new FakeSocket(delay);
                 fakeSocketService.ResetSockets(new List<ISocket> {socketForWarmUp, slowSocket});
+                fakeDns.Setup(d => d.GetHostAddresses("example.com")).Returns(new[] {IPAddress.Parse("1.1.1.1")});
             };
 
-            public Because given_hostname_and_port = () =>
+            public Because ping_remote = () =>
             {
                 tcpPingDriver.Drive(new[] {"example.com:80"});
                 output = fakeOutputWriter.Output;
@@ -109,9 +108,10 @@ namespace TcpPingTest.TcpPingDriverTests
                     slowSocket,
                     slowSocket
                 });
+                fakeDns.Setup(d => d.GetHostAddresses("localhost")).Returns(new[] {IPAddress.Parse("127.0.0.1")});
             };
 
-            public Because given_hostname_and_port = () =>
+            public Because ping_remote = () =>
             {
                 tcpPingDriver.Drive(new[] {"localhost:80"});
                 output = fakeOutputWriter.Output;
