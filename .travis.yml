@@ -4,7 +4,7 @@ mono:
   - latest
 
 install:
-  - nuget restore ./src/TcpPing.sln
+  - nuget restore ./TcpPing.sln
   - nuget install Machine.Specifications.Runner.Console
 
 script:
