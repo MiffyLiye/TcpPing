@@ -13,8 +13,7 @@ namespace TcpPing
                 new SystemSocketService(),
                 Console.Out,
                 TimeSpan.FromSeconds(1), 
-                TimeSpan.FromSeconds(2), 
-                TimeSpan.FromSeconds(0.1));
+                TimeSpan.FromSeconds(2));
 
             try
             {

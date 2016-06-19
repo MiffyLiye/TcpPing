@@ -19,7 +19,6 @@ namespace TcpPing.Drivers
 
         private TimeSpan RetryInterval { get; }
         private TimeSpan TimeOutLimit { get; }
-        private TimeSpan WarmUpLimit { get; }
         private int RetryTimes { get; }
 
         public TcpPingDriver(
@@ -28,7 +27,6 @@ namespace TcpPing.Drivers
             TextWriter outputWriter,
             TimeSpan retryInterval,
             TimeSpan timeOutLimit,
-            TimeSpan warmUpLimit,
             int retryTimes = 4)
         {
             Dns = dns;
@@ -36,26 +34,28 @@ namespace TcpPing.Drivers
             OutputWriter = outputWriter;
             RetryInterval = retryInterval;
             TimeOutLimit = timeOutLimit;
-            WarmUpLimit = warmUpLimit;
             RetryTimes = retryTimes;
         }
 
         private string Hostname { get; set; }
         private int Port { get; set; }
         private IPAddress Ip { get; set; }
+        private IPEndPoint RemoteEndPoint { get; set; }
 
-        private IPEndPoint Remote { get; set; }
+        private static IPEndPoint LocalEndPoint => new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
 
         public void Drive(IReadOnlyList<string> args)
         {
             SetRemoteEndPoint(args[0]);
             OutputWriter.WriteLine($"TCP connect to {Hostname}:{Port} [{Ip}:{Port}]:");
 
-            TcpPing(Remote, WarmUpLimit);
+            //Trigger JIT before time recording starts, details in issue #2
+            TcpPing(LocalEndPoint, TimeOutLimit);
+
             var pingResults = new List<double?>();
             for (var i = 0; i < RetryTimes; i++)
             {
-                var delay = TcpPing(Remote, TimeOutLimit);
+                var delay = TcpPing(RemoteEndPoint, TimeOutLimit);
                 pingResults.Add(delay);
                 OutputWriter.WriteLine(
                     delay.HasValue
@@ -95,7 +95,7 @@ namespace TcpPing.Drivers
             Ip = GetEndPointIp(Hostname);
             Port = GetPortNumber(arg.Split(':')[1]);
 
-            Remote = new IPEndPoint(Ip, Port);
+            RemoteEndPoint = new IPEndPoint(Ip, Port);
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter

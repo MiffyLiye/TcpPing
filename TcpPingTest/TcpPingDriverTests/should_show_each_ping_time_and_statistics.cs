@@ -31,7 +31,6 @@ namespace TcpPingTest.TcpPingDriverTests
                 fakeSocketService,
                 fakeOutputWriter,
                 TimeSpan.FromSeconds(0.1),
-                TimeSpan.FromSeconds(0.1),
                 TimeSpan.FromSeconds(0.1));
         };
 
