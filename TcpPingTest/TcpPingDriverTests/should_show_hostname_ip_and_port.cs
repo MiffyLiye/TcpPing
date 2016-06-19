@@ -53,11 +53,11 @@ namespace TcpPingTest.TcpPingDriverTests
         public class when_set_with_hostname_and_port
         {
             public Establish setup_dns =
-                () => fakeDns.Setup(d => d.GetHostAddresses("example.com")).Returns(new[] {IPAddress.Parse("1.1.1.1")});
+            () => fakeDns.Setup(d => d.GetHostAddresses("example.com")).Returns(new[] {IPAddress.Parse("1.1.1.1")});
 
             public Because given_hostname_and_port = () =>
             {
-                tcpPingDriver.Drive(new[] { "example.com:443" });
+                tcpPingDriver.Drive(new[] {"example.com:443"});
                 output = fakeOutputWriter.Output;
             };
 
@@ -72,13 +72,16 @@ namespace TcpPingTest.TcpPingDriverTests
 
         public class when_host_ip_look_up_failed
         {
-            public Establish setup_dns = () => fakeDns.Setup(d => d.GetHostAddresses("failed.example.com")).Throws<Exception>();
+            public Establish setup_dns =
+            () => fakeDns.Setup(d => d.GetHostAddresses("failed.example.com")).Throws<Exception>();
 
-            public Because lookup_host_ip = () => exception = Catch.Exception(() => tcpPingDriver.Drive(new[] { "failed.example.com:80" }));
+            public Because lookup_host_ip =
+            () => exception = Catch.Exception(() => tcpPingDriver.Drive(new[] {"failed.example.com:80"}));
 
             public It should_throw_exception = () => exception.ShouldNotBeNull();
 
-            public It should_give_error_message = () => exception.Message.ShouldEqual("Failed to look up host address for failed.example.com.");
+            public It should_give_error_message =
+            () => exception.Message.ShouldEqual("Failed to look up host address for failed.example.com.");
 
             private static Exception exception;
         }
