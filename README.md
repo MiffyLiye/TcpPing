@@ -1,5 +1,7 @@
 # TcpPing: A Portable TCP Ping Tool
 
+[![Build Status](https://travis-ci.org/MiffyLiye/TcpPing.svg?branch=master)](https://travis-ci.org/MiffyLiye/TcpPing)
+
 ## Tech Stack
 * Language: C# 6.0
 * Runtime: Mono, .NET Core
