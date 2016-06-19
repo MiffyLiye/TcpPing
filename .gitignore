@@ -194,3 +194,6 @@ ModelManifest.xml
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Test Runner
+Machine.Specifications.Runner.Console*/
