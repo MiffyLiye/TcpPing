@@ -1,0 +1,12 @@
+language: csharp
+solution: ./TcpPing.sln
+mono:
+  - latest
+
+install:
+  - nuget restore ./src/yoursolution.sln
+  - nuget install Machine.Specifications.Runner.Console
+
+script:
+  - xbuild /p:Configuration=Release ./TcpPing.sln
+  - mono ./Machine.Specifications.Runner.Console*/tools/mspec.exe ./TcpPingTest/bin/Release/TcpPingTest.dll
