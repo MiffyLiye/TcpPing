@@ -1,0 +1,5 @@
+version: 0.1.{build}
+configuration: Release
+platform: Any CPU
+build:
+  verbosity: minimal
