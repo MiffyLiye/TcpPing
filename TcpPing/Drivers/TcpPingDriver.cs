@@ -117,17 +117,20 @@ namespace TcpPing.Drivers
             {
                 socket.Blocking = true;
 
-                var stopWatch = new Stopwatch();
-                stopWatch.Start();
-                // ReSharper disable once AccessToDisposedClosure
-                var taskConnect = Task.Run(() => socket.Connect(remote));
+                var taskConnect = Task.Run(() =>
+                {
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    // ReSharper disable once AccessToDisposedClosure
+                    socket.Connect(remote);
+                    stopWatch.Stop();
+                    return stopWatch.Elapsed;
+                });
                 var taskCountDown = Task.Run(() => Thread.Sleep(timeOutLimit));
                 Task.WaitAny(taskConnect, taskCountDown);
-                stopWatch.Stop();
 
                 socket.Close();
-                var delay = stopWatch.Elapsed;
-                return taskConnect.IsCompleted ? (double?) delay.TotalMilliseconds : null;
+                return taskConnect.IsCompleted && !taskConnect.IsFaulted ? (double?) taskConnect.Result.TotalMilliseconds : null;
             }
         }
 
