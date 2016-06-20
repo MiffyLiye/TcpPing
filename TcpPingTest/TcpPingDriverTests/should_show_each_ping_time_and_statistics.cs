@@ -63,7 +63,7 @@ namespace TcpPingTest.TcpPingDriverTests
             public Establish setup_one_slow_socket_connection_potential = () =>
             {
                 var socketForWarmUp = new FakeSocket();
-                var delay = TimeSpan.FromSeconds(0.2);
+                var delay = TimeSpan.FromSeconds(1);
                 var slowSocket = new FakeSocket(delay);
                 fakeSocketService.ResetSockets(new List<ISocket> {socketForWarmUp, slowSocket});
                 fakeDns.Setup(d => d.GetHostAddresses("example.com")).Returns(new[] {IPAddress.Parse("1.1.1.1")});
@@ -99,7 +99,7 @@ namespace TcpPingTest.TcpPingDriverTests
             public Establish setup_one_slow_socket_connection_potential = () =>
             {
                 var socketForWarmUp = new FakeSocket();
-                var delay = TimeSpan.FromSeconds(0.2);
+                var delay = TimeSpan.FromSeconds(1);
                 var slowSocket = new FakeSocket(delay);
                 fakeSocketService.ResetSockets(new List<ISocket>
                 {

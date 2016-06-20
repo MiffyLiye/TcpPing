@@ -127,7 +127,7 @@ namespace TcpPing.Drivers
 
                 socket.Close();
                 var delay = stopWatch.Elapsed;
-                return !taskCountDown.IsCompleted ? (double?) delay.TotalMilliseconds : null;
+                return taskConnect.IsCompleted ? (double?) delay.TotalMilliseconds : null;
             }
         }
 
