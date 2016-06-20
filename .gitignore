@@ -197,3 +197,6 @@ ModelManifest.xml
 
 # Test Runner
 Machine.Specifications.Runner.Console*/
+
+# SonarQube
+.sonarqube

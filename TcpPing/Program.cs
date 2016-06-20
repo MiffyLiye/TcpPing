@@ -6,13 +6,17 @@ namespace TcpPing
 {
     public class Program
     {
+        protected Program()
+        {
+        }
+
         public static void Main(string[] args)
         {
             var tcpPingDriver = new TcpPingDriver(
-                new SystemDns(), 
+                new SystemDns(),
                 new SystemSocketService(),
                 Console.Out,
-                TimeSpan.FromSeconds(1), 
+                TimeSpan.FromSeconds(1),
                 TimeSpan.FromSeconds(2));
 
             try
