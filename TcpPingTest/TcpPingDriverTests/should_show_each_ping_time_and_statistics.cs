@@ -21,6 +21,8 @@ namespace TcpPingTest.TcpPingDriverTests
         private static TextWriterSpy fakeOutputWriter;
         private static TcpPingDriver tcpPingDriver;
 
+        private static TimeSpan RetryInterval => TimeSpan.FromSeconds(0.1);
+        private static TimeSpan TimeOutLimit => TimeSpan.FromSeconds(0.1);
         private static string NewLine => Environment.NewLine;
 
         public Establish given_tcp_ping_driver_with_dns = () =>
@@ -32,8 +34,8 @@ namespace TcpPingTest.TcpPingDriverTests
                 fakeDns.Object,
                 fakeSocketService,
                 fakeOutputWriter,
-                TimeSpan.FromSeconds(0.1),
-                TimeSpan.FromSeconds(0.1));
+                RetryInterval,
+                TimeOutLimit);
         };
 
         public class when_all_pings_received

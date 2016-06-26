@@ -19,6 +19,9 @@ namespace TcpPingTest.TcpPingDriverTests
         private static TextWriterSpy fakeOutputWriter;
         private static TcpPingDriver tcpPingDriver;
 
+        private static TimeSpan RetryInterval => TimeSpan.FromSeconds(0.1);
+        private static TimeSpan TimeOutLimit => TimeSpan.FromSeconds(0.1);
+
         public Establish given_tcp_ping_driver_with_dns = () =>
         {
             fakeDns = new Mock<IDns>();
@@ -28,8 +31,8 @@ namespace TcpPingTest.TcpPingDriverTests
                 fakeDns.Object,
                 fakeSocketService,
                 fakeOutputWriter,
-                TimeSpan.FromSeconds(0.1),
-                TimeSpan.FromSeconds(0.1));
+                RetryInterval,
+                TimeOutLimit);
         };
 
         public class when_set_with_ip_and_port

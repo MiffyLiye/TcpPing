@@ -86,7 +86,7 @@ namespace TcpPing.Drivers
             OutputWriter.Write($"Loss = {lossCount} ");
             OutputWriter.WriteLine($"({100 * lossRate:0}% loss)");
 
-            if (!pingResults.Any(t => t.HasValue)) return;
+            if (pingResults.All(t => !t.HasValue)) return;
 
             var validDelays = pingResults.Where(t => t.HasValue).Select(t => t.Value).ToList();
             OutputWriter.Write($"Minimum = {validDelays.Min():0.00} ms, ");
