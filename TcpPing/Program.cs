@@ -6,10 +6,6 @@ namespace TcpPing
 {
     public class Program
     {
-        protected Program()
-        {
-        }
-
         public static void Main(string[] args)
         {
             var tcpPingDriver = new TcpPingDriver(

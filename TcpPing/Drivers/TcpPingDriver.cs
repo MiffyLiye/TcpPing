@@ -27,7 +27,7 @@ namespace TcpPing.Drivers
             TextWriter outputWriter,
             TimeSpan retryInterval,
             TimeSpan timeOutLimit,
-            int retryTimes)
+            int retryTimes = 4)
         {
             Dns = dns;
             SocketService = socketService;
@@ -35,16 +35,6 @@ namespace TcpPing.Drivers
             RetryInterval = retryInterval;
             TimeOutLimit = timeOutLimit;
             RetryTimes = retryTimes;
-        }
-
-        public TcpPingDriver(
-            IDns dns,
-            ISocketService socketService,
-            TextWriter outputWriter,
-            TimeSpan retryInterval,
-            TimeSpan timeOutLimit)
-            : this(dns, socketService, outputWriter, retryInterval, timeOutLimit, 4)
-        {
         }
 
         private string Hostname { get; set; }
