@@ -1,11 +1,13 @@
 # TcpPing: A Portable TCP Ping Tool
 
 [![Build Status](https://travis-ci.org/MiffyLiye/TcpPing.svg?branch=master)](https://travis-ci.org/MiffyLiye/TcpPing)
-[![Build status](https://ci.appveyor.com/api/projects/status/suru6w0479ddcb32?svg=true)](https://ci.appveyor.com/project/MiffyLiye/tcpping)
+[![Build status](https://ci.appveyor.com/api/projects/status/suru6w0479ddcb32/branch/master?svg=true)](https://ci.appveyor.com/project/MiffyLiye/tcpping/branch/master)
+
+
 
 ## Tech Stack
 * Language: C# 6.0
-* Runtime: Mono, .NET Core
+* Runtime: Mono, .NET Core, .NET Framework
 * Test Framework: Machine.Specifications
 
 ## How to use
@@ -13,6 +15,7 @@ See release notes in each release.
 
 ## Build from source
 ```shell
+nuget restore ./TcpPing.sln
 xbuild /p:Configuration=Release ./TcpPing.sln
 ```
 
@@ -25,6 +28,7 @@ Assume that it is installed to ./Machine.Specifications.Runner.Console/
 
 * Then build the test project in Release mode. 
 ```shell
+nuget restore ./TcpPing.sln
 xbuild /p:Configuration=Release ./TcpPingTest/TcpPingTest.csproj 
 ```
 Assume that the result is ./TcpPingTest/bin/Release/TcpPingTest.dll
