@@ -65,6 +65,7 @@
     <Compile Include="Interfaces\ISocket.cs" />
     <Compile Include="Interfaces\ISocketService.cs" />
     <Compile Include="Interfaces\IStopWatch.cs" />
+    <Compile Include="Interfaces\IWaiter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Drivers\TcpPingDriver.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Resources\SystemSocketService.cs" />
     <Compile Include="Resources\SystemStopWatch.cs" />
     <Compile Include="Resources\SystemStopWatchService.cs" />
+    <Compile Include="Resources\Waiter.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

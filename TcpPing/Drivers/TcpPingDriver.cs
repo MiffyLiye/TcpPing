@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using TcpPing.Interfaces;
+using TcpPing.Resources;
 
 namespace TcpPing.Drivers
 {
@@ -16,26 +16,29 @@ namespace TcpPing.Drivers
         private TextWriter OutputWriter { get; }
         private ISocketService SocketService { get; }
         private IStopWatchService StopWatchService { get; }
+        private IWaiter Waiter { get; }
 
         private TimeSpan RetryInterval { get; }
         private TimeSpan TimeOutLimit { get; }
         private int RetryTimes { get; }
 
         public TcpPingDriver(
-            IDns dns,
-            ISocketService socketService,
-            IStopWatchService stopWatchService,
-            TextWriter outputWriter,
-            TimeSpan retryInterval,
-            TimeSpan timeOutLimit,
+            IDns dns = null,
+            ISocketService socketService = null,
+            IStopWatchService stopWatchService = null,
+            IWaiter waiter = null,
+            TextWriter outputWriter = null,
+            TimeSpan retryInterval = default(TimeSpan),
+            TimeSpan timeOutLimit = default(TimeSpan),
             int retryTimes = 4)
         {
-            Dns = dns;
-            SocketService = socketService;
-            StopWatchService = stopWatchService;
-            OutputWriter = outputWriter;
-            RetryInterval = retryInterval;
-            TimeOutLimit = timeOutLimit;
+            Dns = dns ?? new SystemDns();
+            SocketService = socketService ?? new SystemSocketService();
+            StopWatchService = stopWatchService ?? new SystemStopWatchService();
+            Waiter = waiter ?? new Waiter();
+            OutputWriter = outputWriter ?? Console.Out;
+            RetryInterval = retryInterval != default(TimeSpan) ? retryInterval : TimeSpan.FromSeconds(1);
+            TimeOutLimit = timeOutLimit != default(TimeSpan) ? timeOutLimit : TimeSpan.FromSeconds(2);
             RetryTimes = retryTimes;
         }
 
@@ -63,7 +66,7 @@ namespace TcpPing.Drivers
                     delay.HasValue
                         ? $"Connecting to {Ip}:{Port}: time = {delay.Value:0.00} ms"
                         : "Request timed out");
-                Thread.Sleep(RetryInterval);
+                Waiter.Wait(RetryInterval);
             }
 
             OutputWriter.WriteLine();
@@ -118,7 +121,7 @@ namespace TcpPing.Drivers
                     stopWatch.Stop();
                     return stopWatch.Elapsed;
                 });
-                var taskCountDown = Task.Run(() => Thread.Sleep(timeOutLimit));
+                var taskCountDown = Task.Run(() => Waiter.Wait(TimeOutLimit));
                 Task.WaitAny(taskConnect, taskCountDown);
 
                 socket.Close();

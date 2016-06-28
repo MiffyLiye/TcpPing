@@ -7,5 +7,6 @@ namespace TcpPing.Interfaces
         void Start();
         void Stop();
         TimeSpan Elapsed { get; }
+        void Reset();
     }
 }
