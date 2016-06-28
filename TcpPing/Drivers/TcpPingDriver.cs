@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +15,7 @@ namespace TcpPing.Drivers
         private IDns Dns { get; }
         private TextWriter OutputWriter { get; }
         private ISocketService SocketService { get; }
+        private IStopWatchService StopWatchService { get; }
 
         private TimeSpan RetryInterval { get; }
         private TimeSpan TimeOutLimit { get; }
@@ -24,6 +24,7 @@ namespace TcpPing.Drivers
         public TcpPingDriver(
             IDns dns,
             ISocketService socketService,
+            IStopWatchService stopWatchService,
             TextWriter outputWriter,
             TimeSpan retryInterval,
             TimeSpan timeOutLimit,
@@ -31,6 +32,7 @@ namespace TcpPing.Drivers
         {
             Dns = dns;
             SocketService = socketService;
+            StopWatchService = stopWatchService;
             OutputWriter = outputWriter;
             RetryInterval = retryInterval;
             TimeOutLimit = timeOutLimit;
@@ -109,7 +111,7 @@ namespace TcpPing.Drivers
 
                 var taskConnect = Task.Run(() =>
                 {
-                    var stopWatch = new Stopwatch();
+                    var stopWatch = StopWatchService.GetStopWatch();
                     stopWatch.Start();
                     // ReSharper disable once AccessToDisposedClosure
                     socket.Connect(remote);

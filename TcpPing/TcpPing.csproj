@@ -60,15 +60,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IStopWatchService.cs" />
     <Compile Include="Interfaces\IDns.cs" />
     <Compile Include="Interfaces\ISocket.cs" />
     <Compile Include="Interfaces\ISocketService.cs" />
+    <Compile Include="Interfaces\IStopWatch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Drivers\TcpPingDriver.cs" />
     <Compile Include="Resources\SystemDns.cs" />
     <Compile Include="Resources\SystemSocket.cs" />
     <Compile Include="Resources\SystemSocketService.cs" />
+    <Compile Include="Resources\SystemStopWatch.cs" />
+    <Compile Include="Resources\SystemStopWatchService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

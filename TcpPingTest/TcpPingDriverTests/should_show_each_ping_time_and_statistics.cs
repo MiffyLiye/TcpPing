@@ -8,6 +8,7 @@ using Machine.Specifications;
 using Moq;
 using TcpPing.Drivers;
 using TcpPing.Interfaces;
+using TcpPing.Resources;
 using TcpPingTest.Resources;
 using It = Machine.Specifications.It;
 
@@ -18,6 +19,7 @@ namespace TcpPingTest.TcpPingDriverTests
     {
         private static Mock<IDns> fakeDns;
         private static FakeSocketService fakeSocketService;
+        private static IStopWatchService stopWatchService;
         private static TextWriterSpy fakeOutputWriter;
         private static TcpPingDriver tcpPingDriver;
 
@@ -29,10 +31,12 @@ namespace TcpPingTest.TcpPingDriverTests
         {
             fakeDns = new Mock<IDns>();
             fakeSocketService = new FakeSocketService();
+            stopWatchService = new SystemStopWatchService();
             fakeOutputWriter = new TextWriterSpy();
             tcpPingDriver = new TcpPingDriver(
                 fakeDns.Object,
                 fakeSocketService,
+                stopWatchService,
                 fakeOutputWriter,
                 RetryInterval,
                 TimeOutLimit);

@@ -11,6 +11,7 @@ namespace TcpPing
             var tcpPingDriver = new TcpPingDriver(
                 new SystemDns(),
                 new SystemSocketService(),
+                new SystemStopWatchService(),
                 Console.Out,
                 TimeSpan.FromSeconds(1),
                 TimeSpan.FromSeconds(2));
