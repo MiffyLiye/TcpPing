@@ -1,10 +1,9 @@
 ﻿using System;
 using TcpPing.Drivers;
-using TcpPing.Resources;
 
 namespace TcpPing
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
