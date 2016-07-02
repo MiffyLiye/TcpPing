@@ -7,7 +7,7 @@
 
 ## Tech Stack
 * Language: C# 6.0
-* Runtime: Mono, .NET Core, .NET Framework
+* Runtime: Mono, .NET Framework
 * Test Framework: Machine.Specifications
 
 ## How to use
