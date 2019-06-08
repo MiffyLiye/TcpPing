@@ -35,7 +35,7 @@ Assume that the result is ./TcpPingTest/bin/Release/TcpPingTest.dll
 
 * Finally run tests in TcpPingTest.dll
 ```shell
-mono ./Machine.Specifications.Runner.Console/tools/mspec.exe ./TcpPingTest/bin/Release/TcpPingTest.dll
+mono ./Machine.Specifications.Runner.Console*/tools/mspec.exe ./TcpPingTest/bin/Release/TcpPingTest.dll
 ```
 
 ## Tested Platforms
